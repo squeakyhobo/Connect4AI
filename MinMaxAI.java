@@ -1,59 +1,142 @@
 import java.util.ArrayList;
 
 public class MinMaxAI implements Player {
-    private int maxDepth = 2;
+    private int maxDepth = 5;
+    private int numRows = 6;
+    private int numCols = 7;
+    int nodes_visted;
+
+    public int bestMove;
+    public int token;
+    public int opponentToken;
+    private int emptyToken=0;
+
+
+    public MinMaxAI(int token,int opponentToken,int emptyToken){
+        this.token=token;
+        this.opponentToken = opponentToken;
+        //this.emptyToken = emptyToken;
+    }
     @Override
-    public int makeMove() {
-        // add the recurive function here 
-        return 0;
+    public int makeMove(Board board) {
+        //minVal  = Integer.MAX_VALUE;
+        //maxVal = Integer.MIN_VALUE;
+        nodes_visted =0;
+        bestMove = Math.max(-1, minMax(board, true, 0));
+        System.out.println("nodes visteed: "+nodes_visted);
+        System.out.println("best move: "+(bestMove+1) );
+        return bestMove;
+        
     }
 
     
-    int evaluation(int[][] board){
-        return 0;
-    }
+    int evaluation(Board board){
+        int total =0;
 
-    int minMax(Board board,boolean isMaxing,int depth,int playerToken){
-        // base case
-        if(depth == maxDepth){
-            return evaluation(null);
+        WindowManger windowManger = new WindowManger(board, token, opponentToken, emptyToken);
+        total += centreEval(board.board);
+         total+=windowManger.boardEval();
+         //System.out.println(total);
+         return total;
+
+    }
+    int centreEval(int[][] board){
+        int total =0;
+        int[] weight = new int[]{0,2,5,7,5,2,0};
+        int[] opponentWeight = new int[]{0,-2,-5,-7,-5,-2,0};
+
+        for(int j = 0;j<numCols;j++){
+
+            for(int i =0;i<numRows;i++){
+                if(board[i][j] == token){
+                    total+= weight[j];
+                }
+                else if(board[i][j] == opponentToken){
+                    total+= opponentWeight[j];
+                }
+                
+            }
 
         }
-        else{
-            // genertate all possible moves from current state and apply move
-            ArrayList<Integer> moves = getMoves(board);
-            for(int move : moves){
+        return total;
+
+
+        
+       
+    }
+    
+
+    int minMax(Board board,boolean isMaxing,int depth){
+        // base case
+        nodes_visted++;
+      
+
+        int bestScore;
+        ArrayList<Integer> moves = getMoves(board);
+
+        if(isMaxing){
+            if(board.hasWon(opponentToken)){
                 
-                return(minMax(new Board(board,move,playerToken), !isMaxing, depth+1,playerTokenInverter(playerToken)));
+                return(-1000);
+            }
+            if(depth == maxDepth){
+                return evaluation(board);
+            }
+            bestScore = Integer.MIN_VALUE;
+            for(int move:moves){
+                int score = minMax(new Board(board, move, token), !isMaxing, depth+1);
+                if (score>bestScore) {
+                    bestScore = score;
+                    if(depth==0){
+                        bestMove = move;
+                    }
+                }
+
+
+            }
+            
+        }
+        // must me min player 
+        else{
+            if(board.hasWon(token)){
+                System.out.println("you have won");
+                return(1000);
+            }
+            if(depth == maxDepth){
+                return evaluation(board);
+            }
+            
+            bestScore = Integer.MAX_VALUE;
+            for(int move:moves){
+                int score = minMax(new Board(board, move, opponentToken), !isMaxing, depth+1);
+                bestScore = Math.min(score, bestScore);
             }
         }
-        // get aviable moves
-        // then go thought each move to go to next mov euntil max depth reached then evaulate score and ...
-        return 0;
+
+        if (depth ==0){
+            return bestMove;
+        }
+        System.out.println(bestScore);
+        return bestScore;
+        
     }
 
     ArrayList<Integer> getMoves(Board board){
         ArrayList<Integer> moves = new ArrayList<>();
-        int numCols = 7;
+        
         for(int i = 0; i < numCols;i++){
             if(board.canDropPiece(i)){
                 moves.add(i);
             }
         }
-        System.out.println(moves);
+        //System.out.println(moves);
         return moves;
     }
 
-    int playerTokenInverter(int playerToken){
-        if(playerToken==1)
-        return 2;
-        else if (playerToken ==2){
-            return 1;
 
-        }
-        else{
-            System.out.println("error");
-            return -1;
-        }
-    }
+    
+  
+   
+
+    
 }

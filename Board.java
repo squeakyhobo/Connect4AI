@@ -3,12 +3,11 @@ public class Board{
     private int numCols = 7;
     public int[][] board = new int[numRows][numCols];
 
-    private int player1 = 1;
-    private int player2 =2;
-    private int empty = 0;
+    
+    
 
     public Board(){
-
+        
     }
 
     public Board(Board board,int col,int playerToken){
@@ -16,7 +15,8 @@ public class Board{
             this.board[i] = board.board[i].clone();
             
         }
-        dropPiece(col, col);
+        dropPiece(col, playerToken);
+        
     }
     // simulate dropping a connect 4 piece with graviity then prints it at the end 
     public boolean dropPiece(int col,int playerToken){
@@ -40,7 +40,7 @@ public class Board{
                 return true;
             }
         }
-        System.out.println("column is full");
+        
         return false;
     }
 
@@ -51,12 +51,12 @@ public class Board{
         for(int i =0;i<numRows;i++){
             for(int j = 0;j<numCols;j++){
                 if(board[i][j]==playerToken && (checkHorizontal(playerToken, j, i)||checkVertical(playerToken, j, i)||checkDiagonalRight(playerToken, j, i)||checkDiagonalLeft(playerToken, j, i))){
-                    System.out.println("player "+playerToken+" has won");
+                    //System.out.println("player "+playerToken+" has won");
                     return true;
                 }
             }
         }
-        System.out.println("no one has won yet");
+        //System.out.println("no one has won yet");
         return false;
     }
     boolean checkHorizontal(int playerToken,int col,int row){
