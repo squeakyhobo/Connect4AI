@@ -32,17 +32,19 @@ public class Window{
         
         if(playerCount ==3 && emptyCount == 1){
             
-            return 15;
+            return 50;
         }
+       
+
         else if(enemyCount ==3 && emptyCount == 1){
-            return -10;
+            return -45;
         }
         else if(playerCount == 2&& emptyCount ==2){
-            return 3;
+            return 15;
         }
         
         else if(enemyCount ==2&& emptyCount==2){
-            return -1;
+            return -10;
         }
         else{
             return 0;

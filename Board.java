@@ -73,6 +73,26 @@ public class Board{
         return(row+3<numRows && col-3>=0 && board[row+1][col-1]== playerToken &&board[row+2][col-2]== playerToken&&board[row+3][col-3]== playerToken);
 
     }
+    boolean draw(){
+        
+        
+        
+        int token1 = 1;
+        int token2 = 2;
+        // chcek that there is no empty spaces
+        // then check that no one has won 
+        for(int i=0;i<numRows;i++){
+            for(int j=0;i<numCols;j++){
+                if(board[i][j]==0)
+                    return false;
+            }
+        }
+        if(!hasWon(token2)&&!hasWon(token1)){
+            System.out.println("draw");
+            return true;
+        }
+        return false;
+    }
 
     public String toString(){
         String boardString ="";

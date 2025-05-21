@@ -8,7 +8,7 @@ public interface Player {
 
 class HumanPlayer implements Player{
     private Scanner scanner;
-    private int playerToken;
+    public  int playerToken;
 
     HumanPlayer(Scanner scanner,int playerToken){
         this.scanner=scanner;
@@ -24,7 +24,9 @@ class HumanPlayer implements Player{
             System.out.println("move is not valid, try again");
             col = scanner.nextInt();
         }
-        return col-1;
+        return col-1 ;
+        
+
     }
     
 }
